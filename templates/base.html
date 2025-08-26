@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
-    <!-- Updated Navigation Bar -->
+    <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -18,47 +18,63 @@
                         <i class="fas fa-music text-purple-600 text-2xl mr-2"></i>
                         <span class="font-bold text-xl">Shallarr Music</span>
                     </a>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="{{ url_for('index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Home</a>
+                        <a href="{{ url_for('search') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Search</a>
+                        {% if session.user and session.user.email == ADMIN_EMAIL %}
+                        <a href="{{ url_for('upload') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Upload</a>
+                        <a href="{{ url_for('admin') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Admin</a>
+                        {% endif %}
+                    </div>
                 </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-200 hover:text-purple-600 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500" aria-expanded="false">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-
-                <!-- Desktop menu -->
-                <div class="hidden md:ml-6 md:flex md:space-x-8">
-                    <a href="{{ url_for('index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Home</a>
-                    <a href="{{ url_for('search') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Search</a>
-                    {% if session.user and session.user.email == config.ADMIN_EMAIL %}
-                    <a href="{{ url_for('upload') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Upload</a>
-                    <a href="{{ url_for('admin') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Admin</a>
-                    {% endif %}
-                </div>
-
-                <div class="hidden md:flex items-center">
+                <div class="flex items-center">
+                    <!-- Search Button (Mobile) -->
+                    <a href="{{ url_for('search') }}" class="md:hidden mr-4 p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    
                     {% if session.user %}
-                    <a href="{{ url_for('profile') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800">Profile</a>
-                    <a href="{{ url_for('logout') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">Logout</a>
+                    <!-- User Menu -->
+                    <div class="hidden md:flex items-center">
+                        <a href="{{ url_for('profile') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800">
+                            <i class="fas fa-user mr-1"></i> Profile
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </a>
+                    </div>
                     {% else %}
-                    <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md text-sm font-medium border border-transparent bg-purple-600 text-white hover:bg-purple-700">Login</a>
-                    <a href="{{ url_for('signup') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-300 border border-purple-600 dark:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600">Sign Up</a>
+                    <!-- Auth Buttons -->
+                    <div class="hidden md:flex items-center">
+                        <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md text-sm font-medium border border-transparent bg-purple-600 text-white hover:bg-purple-700">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login
+                        </a>
+                        <a href="{{ url_for('signup') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-300 border border-purple-600 dark:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600">
+                            <i class="fas fa-user-plus mr-1"></i> Sign Up
+                        </a>
+                    </div>
                     {% endif %}
+                    
                     <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+
+                    <!-- Mobile menu button -->
+                    <button class="md:hidden ml-4 p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 mobile-menu-button">
+                        <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile menu, show/hide based on menu state -->
-        <div class="mobile-menu md:hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <!-- Mobile menu -->
+        <div class="mobile-menu md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="{{ url_for('index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-white hover:bg-purple-600">Home</a>
                 <a href="{{ url_for('search') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-white hover:bg-purple-600">Search</a>
-                {% if session.user and session.user.email == config.ADMIN_EMAIL %}
+                
+                {% if session.user and session.user.email == ADMIN_EMAIL %}
                 <a href="{{ url_for('upload') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-white hover:bg-purple-600">Upload</a>
                 <a href="{{ url_for('admin') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-white hover:bg-purple-600">Admin</a>
                 {% endif %}
@@ -73,6 +89,7 @@
             </div>
         </div>
     </nav>
+
     <!-- Main Content -->
     <main class="flex-grow">
         {% block content %}{% endblock %}

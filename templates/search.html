@@ -3,25 +3,34 @@
 {% block title %}Search - Shallarr Music{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <h1 class="text-3xl font-bold mb-8">Search Songs</h1>
     
     <!-- Search Form -->
-    <div class="mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
         <form action="{{ url_for('search') }}" method="GET" class="flex">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search for songs, artists..." class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white">
-            <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-r-md hover:bg-purple-700">
-                <i class="fas fa-search"></i>
+            <input type="text" name="q" value="{{ query }}" placeholder="Search for songs, artists..." 
+                   class="flex-grow px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white">
+            <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-r-md hover:bg-purple-700 flex items-center">
+                <i class="fas fa-search mr-2"></i> Search
             </button>
         </form>
     </div>
     
+    <!-- Error Message -->
+    {% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline"> {{ error }}</span>
+    </div>
+    {% endif %}
+    
     <!-- Search Results -->
     {% if query %}
-        <h2 class="text-xl font-semibold mb-4">Search Results for "{{ query }}"</h2>
+        <h2 class="text-xl font-semibold mb-6">Search Results for "{{ query }}"</h2>
         
         {% if songs %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {% for song in songs %}
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div class="relative">
@@ -39,10 +48,18 @@
                         {{ song.artist }}{% if song.featured_artist %} ft. {{ song.featured_artist }}{% endif %}
                     </p>
                     <div class="flex justify-between items-center mt-3">
-                        <button class="like-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" data-song-id="{{ song.id }}">
-                            <i class="far fa-heart mr-1"></i>
-                            <span class="like-count">{{ song.likes }}</span>
-                        </button>
+                        <div class="flex space-x-2">
+                            <button class="like-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" data-song-id="{{ song.id }}">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="like-count">{{ song.likes }}</span>
+                            </button>
+                            <button class="share-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                                    data-song-id="{{ song.id }}"
+                                    data-title="{{ song.title }}"
+                                    data-artist="{{ song.artist }}">
+                                <i class="fas fa-share-alt mr-1"></i>
+                            </button>
+                        </div>
                         <span class="text-xs text-gray-400">{{ song.created_at|string|truncate(10, True, '') }}</span>
                     </div>
                 </div>
@@ -50,11 +67,21 @@
             {% endfor %}
         </div>
         {% else %}
-        <div class="text-center py-12">
+        <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow">
             <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
             <p class="text-gray-500 dark:text-gray-400">No results found for "{{ query }}"</p>
+            <p class="text-sm text-gray-400 mt-2">Try different keywords or browse all songs</p>
+            <a href="{{ url_for('index') }}" class="inline-block mt-4 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                Browse All Songs
+            </a>
         </div>
         {% endif %}
+    {% else %}
+    <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow">
+        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500 dark:text-gray-400">Search for your favorite songs</p>
+        <p class="text-sm text-gray-400 mt-2">Enter a song title, artist name, or other keywords in the search box above</p>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

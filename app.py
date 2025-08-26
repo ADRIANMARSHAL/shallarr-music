@@ -168,16 +168,41 @@ def upload():
 
 @app.route('/search')
 def search():
-    query = request.args.get('q', '')
+    query = request.args.get('q', '').strip()
+    songs = []
+    error = None
     
     if query:
-        # Search songs by title or artist
-        response = supabase.table('songs').select('*').or_(f"title.ilike.%{query}%,artist.ilike.%{query}%").execute()
-        songs = response.data if response.data else []
-    else:
-        songs = []
+        try:
+            # Method 1: Try individual searches
+            title_response = supabase.table('songs')\
+                .select('*')\
+                .ilike('title', f'%{query}%')\
+                .execute()
+            
+            artist_response = supabase.table('songs')\
+                .select('*')\
+                .ilike('artist', f'%{query}%')\
+                .execute()
+            
+            # Combine results
+            title_songs = title_response.data if title_response.data else []
+            artist_songs = artist_response.data if artist_response.data else []
+            
+            # Remove duplicates
+            seen_ids = set()
+            songs = []
+            
+            for song in title_songs + artist_songs:
+                if song['id'] not in seen_ids:
+                    seen_ids.add(song['id'])
+                    songs.append(song)
+                    
+        except Exception as e:
+            error = f"Search error: {str(e)}"
+            print(error)
     
-    return render_template('search.html', songs=songs, query=query)
+    return render_template('search.html', songs=songs, query=query, error=error)
 
 @app.route('/like/<song_id>', methods=['POST'])
 @login_required
