@@ -1,0 +1,204 @@
+/* Custom styles for Shallarr Music */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Smooth transitions for theme switching */
+* {
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #374151;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c4b5fd;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a78bfa;
+}
+
+/* Animation for music player */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.play-btn:hover {
+    animation: pulse 1s infinite;
+}
+
+/* Loading animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+/* Custom styles for music player */
+.music-player {
+    transition: all 0.3s ease;
+}
+
+.progress-bar {
+    transition: width 0.1s linear;
+}
+
+/* Song card hover effects */
+.song-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.song-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Like button animation */
+.like-btn {
+    transition: color 0.2s ease;
+}
+
+.like-btn.liked {
+    color: #ec4899;
+}
+
+/* Theme transition smoothness */
+.theme-transition * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Form input focus styles */
+.input-focus:focus {
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+}
+
+/* Button hover effects */
+.btn-hover {
+    transition: all 0.2s ease;
+}
+
+.btn-hover:hover {
+    transform: translateY(-1px);
+}
+
+/* Notification animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.notification {
+    animation: slideIn 0.3s ease forwards;
+}
+
+.notification.hiding {
+    animation: slideOut 0.3s ease forwards;
+}
+
+/* Audio visualizer effect (placeholder) */
+.audio-visualizer {
+    display: flex;
+    align-items: flex-end;
+    height: 30px;
+    gap: 2px;
+}
+
+.visualizer-bar {
+    width: 3px;
+    background-color: #8b5cf6;
+    border-radius: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .music-player {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .player-controls {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Dark mode specific adjustments */
+.dark .song-card {
+    border: 1px solid #374151;
+}
+
+.dark .input-field {
+    background-color: #4b5563;
+    border-color: #4b5563;
+    color: #f3f4f6;
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.skeleton {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    position: relative;
+}
+
+.dark .skeleton {
+    background: linear-gradient(to right, #374151 8%, #4b5563 18%, #374151 33%);
+    background-size: 800px 104px;
+}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Shallarr Music{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl font-bold mb-8">Admin Dashboard</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 mr-4">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Users</p>
+                    <h3 class="text-2xl font-bold">{{ users_count }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 mr-4">
+                    <i class="fas fa-music text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Songs</p>
+                    <h3 class="text-2xl font-bold">{{ songs_count }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 mr-4">
+                    <i class="fas fa-play-circle text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Streams</p>
+                    <h3 class="text-2xl font-bold">{{ total_streams }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 mr-4">
+                    <i class="fas fa-heart text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Likes</p>
+                    <h3 class="text-2xl font-bold">{{ total_likes }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Songs Management -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold">Songs Management</h2>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for song in songs %}
+            <div class="p-6 flex flex-col md:flex-row items-start md:items-center">
+                <img src="{{ song.cover_url }}" alt="{{ song.title }}" class="w-16 h-16 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                <div class="flex-grow">
+                    <h3 class="font-semibold">{{ song.title }}</h3>
+                    <p class="text-gray-500 dark:text-gray-400">
+                        {{ song.artist }}{% if song.featured_artist %} ft. {{ song.featured_artist }}{% endif %}
+                    </p>
+                    <div class="flex mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        <span class="mr-4"><i class="fas fa-play mr-1"></i> {{ song.streams }} streams</span>
+                        <span><i class="fas fa-heart mr-1"></i> {{ song.likes }} likes</span>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-2">
+                    <button class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-md text-sm hover:bg-blue-200 dark:hover:bg-blue-800">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="px-3 py-1 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-md text-sm hover:bg-red-200 dark:hover:bg-red-800">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+        <div class="flex space-x-4">
+            <a href="{{ url_for('upload') }}" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                <i class="fas fa-upload mr-2"></i> Upload New Song
+            </a>
+            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
+                <i class="fas fa-cog mr-2"></i> Settings
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

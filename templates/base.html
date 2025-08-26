@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shallarr Music - {% block title %}Stream Your Music{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-music text-purple-600 text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">Shallarr Music</span>
+                    </a>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="{{ url_for('index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Home</a>
+                        <a href="{{ url_for('search') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Search</a>
+                        {% if session.user and session.user.email == config.ADMIN_EMAIL %}
+                        <a href="{{ url_for('upload') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Upload</a>
+                        <a href="{{ url_for('admin') }}" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-medium">Admin</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    {% if session.user %}
+                    <a href="{{ url_for('profile') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800">Profile</a>
+                    <a href="{{ url_for('logout') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">Logout</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md text-sm font-medium border border-transparent bg-purple-600 text-white hover:bg-purple-700">Login</a>
+                    <a href="{{ url_for('signup') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-300 border border-purple-600 dark:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600">Sign Up</a>
+                    {% endif %}
+                    <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Music Player -->
+    <div id="music-player" class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg hidden">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img id="player-cover" src="" alt="Cover" class="w-12 h-12 rounded-lg">
+                <div>
+                    <div id="player-title" class="font-semibold"></div>
+                    <div id="player-artist" class="text-sm text-gray-500 dark:text-gray-400"></div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="player-prev" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="player-play" class="p-3 rounded-full bg-purple-600 text-white hover:bg-purple-700">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="player-next" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="w-1/4">
+                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                    <span id="player-current-time">0:00</span>
+                    <span id="player-total-time">0:00</span>
+                </div>
+                <div class="h-1 bg-gray-200 dark:bg-gray-700 rounded-full mt-1">
+                    <div id="player-progress" class="h-1 bg-purple-600 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button id="player-volume-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <input id="player-volume" type="range" min="0" max="100" value="80" class="w-20">
+            </div>
+        </div>
+        <audio id="audio-element" class="hidden"></audio>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="fixed top-4 right-4 z-50">
+                {% for message in messages %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-2 shadow-lg" role="alert">
+                        <span class="block sm:inline">{{ message }}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3 close-flash">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

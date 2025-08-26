@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Upload - Shallarr Music{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-2xl font-bold">Upload New Song</h2>
+            <p class="text-gray-500 dark:text-gray-400">Add a new track to your music library</p>
+        </div>
+        
+        <div class="p-6">
+            {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+            {% endif %}
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Song Title *</label>
+                    <input type="text" id="title" name="title" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white"
+                           placeholder="Enter song title">
+                </div>
+                
+                <div>
+                    <label for="artist" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Artist Name *</label>
+                    <input type="text" id="artist" name="artist" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white"
+                           placeholder="Enter artist name">
+                </div>
+                
+                <div>
+                    <label for="featured_artist" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Featured Artist (Optional)</label>
+                    <input type="text" id="featured_artist" name="featured_artist" 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white"
+                           placeholder="Enter featured artist name">
+                </div>
+                
+                <div>
+                    <label for="audio_file" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Audio File *</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="audio_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i class="fas fa-music text-gray-400 text-2xl mb-2"></i>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">Click to upload audio file</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">MP3, WAV, or FLAC (MAX. 50MB)</p>
+                            </div>
+                            <input id="audio_file" name="audio_file" type="file" class="hidden" accept="audio/*" required />
+                        </label>
+                    </div>
+                    <p id="audio-file-name" class="text-sm text-gray-500 dark:text-gray-400 mt-2 hidden">No file chosen</p>
+                </div>
+                
+                <div>
+                    <label for="cover_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cover Image *</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="cover_image" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i class="fas fa-image text-gray-400 text-2xl mb-2"></i>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">Click to upload cover image</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">JPG, PNG, or WEBP (MAX. 10MB)</p>
+                            </div>
+                            <input id="cover_image" name="cover_image" type="file" class="hidden" accept="image/*" required />
+                        </label>
+                    </div>
+                    <p id="cover-file-name" class="text-sm text-gray-500 dark:text-gray-400 mt-2 hidden">No file chosen</p>
+                </div>
+                
+                <div class="flex justify-between items-center pt-4">
+                    <a href="{{ url_for('index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors">
+                        <i class="fas fa-upload mr-2"></i> Upload Song
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Upload Guidelines -->
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg mt-6 p-6">
+        <h3 class="text-lg font-semibold mb-4">Upload Guidelines</h3>
+        <ul class="list-disc list-inside space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <li>Audio files should be in MP3, WAV, or FLAC format</li>
+            <li>Maximum audio file size: 50MB</li>
+            <li>Cover images should be in JPG, PNG, or WEBP format</li>
+            <li>Recommended cover image size: 1000x1000 pixels</li>
+            <li>Maximum image file size: 10MB</li>
+            <li>Only admin users can upload songs</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Show selected file names
+    document.getElementById('audio_file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name || 'No file chosen';
+        document.getElementById('audio-file-name').textContent = fileName;
+        document.getElementById('audio-file-name').classList.remove('hidden');
+    });
+    
+    document.getElementById('cover_image').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name || 'No file chosen';
+        document.getElementById('cover-file-name').textContent = fileName;
+        document.getElementById('cover-file-name').classList.remove('hidden');
+    });
+    
+    // Basic file validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const audioFile = document.getElementById('audio_file').files[0];
+        const coverFile = document.getElementById('cover_image').files[0];
+        
+        if (audioFile && audioFile.size > 50 * 1024 * 1024) {
+            e.preventDefault();
+            alert('Audio file must be less than 50MB');
+            return false;
+        }
+        
+        if (coverFile && coverFile.size > 10 * 1024 * 1024) {
+            e.preventDefault();
+            alert('Cover image must be less than 10MB');
+            return false;
+        }
+    });
+</script>
+{% endblock %}
