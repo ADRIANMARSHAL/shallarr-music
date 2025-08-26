@@ -175,3 +175,122 @@ html, body {
 .mobile-spacing > *:last-child {
     margin-bottom: 0;
 }
+/* Mobile Navigation Improvements */
+@media (max-width: 768px) {
+    /* Navigation bar */
+    nav .flex.justify-between {
+        flex-direction: column;
+        padding: 0.5rem 0;
+    }
+    
+    /* Top navigation row */
+    nav > div > div:first-child {
+        padding: 0.5rem 0;
+    }
+    
+    /* Auth buttons - always visible */
+    .flex.items-center.space-x-2 {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .flex.items-center.space-x-2 a {
+        min-width: auto;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Mobile navigation row */
+    .flex.justify-center.space-x-4 {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+    }
+    
+    .flex.justify-center.space-x-4 a {
+        min-width: auto;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
+    
+    /* Ensure text is visible on mobile */
+    .flex.justify-center.space-x-4 span {
+        display: inline !important;
+    }
+    
+    /* Music player adjustments */
+    #music-player .max-w-7xl.mx-auto {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+    
+    #music-player .flex.items-center.space-x-2 {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Song cards */
+    .grid.grid-cols-1 {
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+    
+    .bg-white.rounded-xl {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .flex.items-center.space-x-2 {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.25rem;
+    }
+    
+    .flex.items-center.space-x-2 a {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .flex.justify-center.space-x-4 {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .flex.justify-center.space-x-4 a {
+        width: 100%;
+    }
+    
+    /* Theme toggle size */
+    #theme-toggle {
+        margin-left: 0.5rem;
+    }
+}
+
+/* Ensure all buttons are touch-friendly */
+button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Prevent text hiding on mobile */
+.hidden.sm\:inline {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .hidden.sm\:inline {
+        display: inline;
+    }
+}

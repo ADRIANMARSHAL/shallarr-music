@@ -20,75 +20,77 @@
                     </a>
                 </div>
                 
-                <div class="flex items-center">
-                    <!-- Search Button (Mobile) -->
-                    <a href="{{ url_for('search') }}" class="md:hidden mr-3 p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <div class="flex items-center space-x-4">
+                    <!-- Search Button -->
+                    <a href="{{ url_for('search') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-search"></i>
+                        <span class="ml-1 hidden sm:inline">Search</span>
                     </a>
                     
-                    <!-- Desktop Menu -->
-                    <div class="hidden md:flex items-center space-x-4">
-                        <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Home</a>
-                        <a href="{{ url_for('search') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Search</a>
-                        
-                        {% if user and user.email == ADMIN_EMAIL %}
-                        <a href="{{ url_for('upload') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Upload</a>
-                        <a href="{{ url_for('admin') }}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Admin</a>
-                        {% endif %}
-                    </div>
+                    <!-- Navigation Links - Visible on all screens -->
+                    <a href="{{ url_for('index') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
+                        <i class="fas fa-home"></i>
+                        <span class="ml-1">Home</span>
+                    </a>
                     
-                    <!-- Auth Buttons -->
-                    <div class="hidden md:flex items-center ml-4">
+                    {% if user and user.email == ADMIN_EMAIL %}
+                    <a href="{{ url_for('upload') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
+                        <i class="fas fa-upload"></i>
+                        <span class="ml-1">Upload</span>
+                    </a>
+                    <a href="{{ url_for('admin') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
+                        <i class="fas fa-cog"></i>
+                        <span class="ml-1">Admin</span>
+                    </a>
+                    {% endif %}
+                    
+                    <!-- Auth Buttons - Always Visible -->
+                    <div class="flex items-center space-x-2">
                         {% if user %}
-                        <a href="{{ url_for('profile') }}" class="px-4 py-2 rounded-md text-sm font-medium bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800 mr-2">
-                            <i class="fas fa-user mr-1"></i> Profile
+                        <a href="{{ url_for('profile') }}" class="px-3 py-1 rounded-md text-sm bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800 flex items-center">
+                            <i class="fas fa-user mr-1"></i>
+                            <span class="hidden sm:inline">Profile</span>
                         </a>
-                        <a href="{{ url_for('logout') }}" class="px-4 py-2 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
-                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        <a href="{{ url_for('logout') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center">
+                            <i class="fas fa-sign-out-alt mr-1"></i>
+                            <span class="hidden sm:inline">Logout</span>
                         </a>
                         {% else %}
-                        <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 mr-2">
-                            <i class="fas fa-sign-in-alt mr-1"></i> Login
+                        <a href="{{ url_for('login') }}" class="px-3 py-1 rounded-md text-sm bg-purple-600 text-white hover:bg-purple-700 flex items-center">
+                            <i class="fas fa-sign-in-alt mr-1"></i>
+                            <span class="hidden sm:inline">Login</span>
                         </a>
-                        <a href="{{ url_for('signup') }}" class="px-4 py-2 rounded-md text-sm font-medium bg-white dark:bg-gray-800 border border-purple-600 text-purple-600 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-gray-700">
-                            <i class="fas fa-user-plus mr-1"></i> Sign Up
+                        <a href="{{ url_for('signup') }}" class="px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 border border-purple-600 text-purple-600 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-gray-700 flex items-center">
+                            <i class="fas fa-user-plus mr-1"></i>
+                            <span class="hidden sm:inline">Sign Up</span>
                         </a>
                         {% endif %}
                     </div>
                     
-                    <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
                         <i class="fas fa-moon dark:hidden"></i>
                         <i class="fas fa-sun hidden dark:block"></i>
                     </button>
-
-                    <!-- Mobile menu button -->
-                    <button class="md:hidden ml-4 p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 mobile-menu-button">
-                        <i class="fas fa-bars"></i>
-                    </button>
                 </div>
             </div>
-        </div>
-
-        <!-- Mobile menu -->
-        <div class="mobile-menu md:hidden hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-            <div class="px-4 py-3 space-y-2">
-                <a href="{{ url_for('index') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Home</a>
-                <a href="{{ url_for('search') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Search</a>
+            
+            <!-- Mobile Navigation Row - Visible on small screens -->
+            <div class="flex justify-center space-x-4 py-2 border-t border-gray-200 dark:border-gray-700 sm:hidden">
+                <a href="{{ url_for('index') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-home mr-1"></i>
+                    <span>Home</span>
+                </a>
                 
                 {% if user and user.email == ADMIN_EMAIL %}
-                <a href="{{ url_for('upload') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Upload</a>
-                <a href="{{ url_for('admin') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Admin</a>
+                <a href="{{ url_for('upload') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-upload mr-1"></i>
+                    <span>Upload</span>
+                </a>
+                <a href="{{ url_for('admin') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-cog mr-1"></i>
+                    <span>Admin</span>
+                </a>
                 {% endif %}
-                
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
-                    {% if user %}
-                    <a href="{{ url_for('profile') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
-                    <a href="{{ url_for('logout') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
-                    {% else %}
-                    <a href="{{ url_for('login') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Login</a>
-                    <a href="{{ url_for('signup') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-700">Sign Up</a>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </nav>
