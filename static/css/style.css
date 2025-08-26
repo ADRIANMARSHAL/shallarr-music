@@ -1,204 +1,247 @@
-/* Custom styles for Shallarr Music */
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* Smooth transitions for theme switching */
-* {
-    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.dark ::-webkit-scrollbar-track {
-    background: #374151;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #c4b5fd;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #a78bfa;
-}
-
-/* Animation for music player */
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-.play-btn:hover {
-    animation: pulse 1s infinite;
-}
-
-/* Loading animation */
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-}
-
-/* Custom styles for music player */
-.music-player {
-    transition: all 0.3s ease;
-}
-
-.progress-bar {
-    transition: width 0.1s linear;
-}
-
-/* Song card hover effects */
-.song-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.song-card:hover {
-    transform: translateY(-4px);
-}
-
-/* Like button animation */
-.like-btn {
-    transition: color 0.2s ease;
-}
-
-.like-btn.liked {
-    color: #ec4899;
-}
-
-/* Theme transition smoothness */
-.theme-transition * {
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-/* Form input focus styles */
-.input-focus:focus {
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
-}
-
-/* Button hover effects */
-.btn-hover {
-    transition: all 0.2s ease;
-}
-
-.btn-hover:hover {
-    transform: translateY(-1px);
-}
-
-/* Notification animations */
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-.notification {
-    animation: slideIn 0.3s ease forwards;
-}
-
-.notification.hiding {
-    animation: slideOut 0.3s ease forwards;
-}
-
-/* Audio visualizer effect (placeholder) */
-.audio-visualizer {
-    display: flex;
-    align-items: flex-end;
-    height: 30px;
-    gap: 2px;
-}
-
-.visualizer-bar {
-    width: 3px;
-    background-color: #8b5cf6;
-    border-radius: 3px;
-}
-
-/* Responsive adjustments */
+/* Mobile Responsiveness Fixes */
 @media (max-width: 768px) {
-    .music-player {
+    /* Navigation fixes */
+    nav .flex.justify-between {
         flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    nav .hidden.md\:flex {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    nav .hidden.md\:flex a {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    nav .flex.items-center {
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    /* Fix for music player on mobile */
+    #music-player .max-w-7xl.mx-auto {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    #music-player .flex.items-center.space-x-4 {
+        justify-content: center;
+    }
+    
+    #music-player .w-1\/4 {
+        width: 100%;
+        margin: 1rem 0;
+    }
+    
+    /* Song grid fixes */
+    .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Card content fixes */
+    .bg-white.dark\:bg-gray-800.rounded-xl.shadow-md {
+        margin: 0.5rem;
+    }
+    
+    /* Form fixes */
+    .max-w-md.mx-auto.px-4.py-12 {
         padding: 1rem;
     }
     
-    .player-controls {
-        margin-top: 1rem;
+    /* Text size adjustments */
+    .text-3xl.font-bold {
+        font-size: 1.5rem;
+    }
+    
+    .text-xl {
+        font-size: 1.1rem;
+    }
+    
+    /* Button spacing */
+    .flex.space-x-2 button, .flex.space-x-2 a {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Search form fix */
+    .flex input[type="text"] {
+        min-width: auto;
+    }
+    
+    /* Admin dashboard fixes */
+    .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4.gap-6 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Profile page fixes */
+    .flex.flex-col.sm\:flex-row.items-center {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .flex-shrink-0.mb-4.sm\:mb-0.sm\:mr-6 {
+        margin-right: 0;
         margin-bottom: 1rem;
     }
-}
-
-/* Dark mode specific adjustments */
-.dark .song-card {
-    border: 1px solid #374151;
-}
-
-.dark .input-field {
-    background-color: #4b5563;
-    border-color: #4b5563;
-    color: #f3f4f6;
-}
-
-/* Loading skeleton animation */
-@keyframes shimmer {
-    0% {
-        background-position: -468px 0;
+    
+    /* Music player mobile optimization */
+    #music-player {
+        padding: 1rem;
     }
-    100% {
-        background-position: 468px 0;
+    
+    #music-player .flex.items-center.justify-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    #music-player img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    #player-volume {
+        width: 60px;
+    }
+    
+    /* Fullscreen player mobile fixes */
+    #fullscreen-player .w-1\/2 {
+        width: 90%;
+    }
+    
+    #fullscreen-cover {
+        width: 200px;
+        height: 200px;
     }
 }
 
-.skeleton {
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
-    animation-name: shimmer;
-    animation-timing-function: linear;
-    background: #f6f7f8;
-    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
-    background-size: 800px 104px;
-    position: relative;
+@media (max-width: 480px) {
+    /* Extra small device fixes */
+    .px-6.py-8 {
+        padding: 1rem;
+    }
+    
+    .p-6 {
+        padding: 1rem;
+    }
+    
+    .text-2xl {
+        font-size: 1.3rem;
+    }
+    
+    /* Music player button sizes */
+    #music-player button {
+        padding: 0.5rem;
+    }
+    
+    #music-player .flex.items-center.space-x-4 {
+        justify-content: space-between;
+    }
+    
+    /* Hide less important elements on mobile */
+    .mobile\:hidden {
+        display: none;
+    }
+    
+    /* Touch-friendly button sizes */
+    button, a.btn {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
-.dark .skeleton {
-    background: linear-gradient(to right, #374151 8%, #4b5563 18%, #374151 33%);
-    background-size: 800px 104px;
+/* General mobile improvements */
+@media (hover: none) {
+    /* Improve touch interactions */
+    button:hover, a:hover {
+        transform: none;
+    }
+    
+    .play-btn:hover {
+        animation: none;
+    }
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Improve touch targets for mobile */
+@media (max-width: 768px) {
+    .play-btn, .like-btn {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Form elements */
+    input, select, textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Increase spacing for mobile */
+    .gap-6 {
+        gap: 1rem;
+    }
+    
+    .space-y-6 > * + * {
+        margin-top: 1rem;
+    }
+}
+
+/* Mobile menu */
+.mobile-menu-button {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-button {
+        display: block;
+    }
+    
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .mobile-menu.active {
+        display: flex;
+    }
+    
+    .hidden.md\:flex {
+        display: none !important;
+    }
+    
+    .hidden.md\:flex.mobile-menu.active {
+        display: flex !important;
+    }
+}
+
+/* Show mobile-only elements */
+.mobile\:block {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile\:block {
+        display: block;
+    }
+    
+    .mobile\:hidden {
+        display: none;
+    }
 }

@@ -183,44 +183,50 @@ def search():
 @login_required
 def like_song(song_id):
     user_id = session['user']['id']
+    print(f"Like request: user={user_id}, song={song_id}")
     
     try:
         # Check if song exists first
-        song_check = supabase.table('songs').select('id').eq('id', song_id).execute()
+        song_check = supabase.table('songs').select('id, likes').eq('id', song_id).execute()
+        print(f"Song check: {song_check.data}")
+        
         if not song_check.data:
             return jsonify({'success': False, 'error': 'Song not found'})
         
-        # Check if user already liked the song
-        existing_like = supabase.table('likes').select('*').eq('user_id', user_id).eq('song_id', song_id).execute()
+        # Check if user already liked the song using admin client
+        existing_like = supabase_admin.table('likes').select('*').eq('user_id', user_id).eq('song_id', song_id).execute()
+        print(f"Existing like check: {existing_like.data}")
+        
+        current_likes = song_check.data[0]['likes']
+        print(f"Current likes: {current_likes}")
         
         if existing_like.data:
             # Unlike the song
-            supabase.table('likes').delete().eq('user_id', user_id).eq('song_id', song_id).execute()
-            # Get current likes safely
-            current_likes_response = supabase.table('songs').select('likes').eq('id', song_id).execute()
-            current_likes = current_likes_response.data[0]['likes'] if current_likes_response.data else 0
-            supabase.table('songs').update({'likes': current_likes - 1}).eq('id', song_id).execute()
+            delete_result = supabase_admin.table('likes').delete().eq('user_id', user_id).eq('song_id', song_id).execute()
+            print(f"Delete result: {delete_result}")
+            new_likes = max(0, current_likes - 1)
             liked = False
         else:
             # Like the song
-            supabase.table('likes').insert({
+            insert_result = supabase_admin.table('likes').insert({
                 'user_id': user_id,
                 'song_id': song_id
             }).execute()
-            # Get current likes safely
-            current_likes_response = supabase.table('songs').select('likes').eq('id', song_id).execute()
-            current_likes = current_likes_response.data[0]['likes'] if current_likes_response.data else 0
-            supabase.table('songs').update({'likes': current_likes + 1}).eq('id', song_id).execute()
+            print(f"Insert result: {insert_result}")
+            new_likes = current_likes + 1
             liked = True
         
-        # Get updated like count safely
-        song_response = supabase.table('songs').select('likes').eq('id', song_id).execute()
-        likes = song_response.data[0]['likes'] if song_response.data else 0
+        # Update the like count in songs table
+        update_result = supabase_admin.table('songs').update({'likes': new_likes}).eq('id', song_id).execute()
+        print(f"Update result: {update_result}")
         
-        return jsonify({'success': True, 'likes': likes, 'liked': liked})
+        return jsonify({'success': True, 'likes': new_likes, 'liked': liked})
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
+        print(f"Error in like_song: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': 'Unable to process like. Please try again.'})
+            
 @app.route('/stream/<song_id>', methods=['POST'])
 def stream_song(song_id):
     try:
@@ -234,10 +240,17 @@ def stream_song(song_id):
         
         # Increment stream count
         supabase.table('songs').update({'streams': current_streams + 1}).eq('id', song_id).execute()
-        return jsonify({'success': True})
+        
+        # Return success with CORS headers if needed
+        response = jsonify({'success': True})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+        
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
-
+        response = jsonify({'success': False, 'error': str(e)})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    
 @app.route('/profile')
 @login_required
 def profile():

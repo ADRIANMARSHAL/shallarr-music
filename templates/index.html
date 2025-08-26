@@ -36,6 +36,14 @@
                         <i class="far fa-heart mr-1"></i>
                         <span class="like-count">{{ song.likes }}</span>
                     </button>
+                    <!-- Add this to your song card, near the like button -->
+                    <button class="share-btn flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 ml-2"
+                            data-song-id="{{ song.id }}"
+                            data-title="{{ song.title }}"
+                            data-artist="{{ song.artist }}">
+                        <i class="fas fa-share-alt mr-1"></i>
+                        Share
+                    </button>
                     <span class="text-xs text-gray-400">{{ song.created_at|string|truncate(10, True, '') }}</span>
                 </div>
             </div>
