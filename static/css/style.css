@@ -7,146 +7,138 @@
     }
     
     nav .hidden.md\:flex {
-        display: flex;
+        display: none;
         flex-direction: column;
         width: 100%;
         margin-top: 1rem;
-    }
-    
-    nav .hidden.md\:flex a {
-        padding: 0.5rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     nav .flex.items-center {
         margin-top: 1rem;
         width: 100%;
         justify-content: space-between;
+        flex-wrap: wrap;
     }
     
-    /* Fix for music player on mobile */
+    /* Mobile menu */
+    .mobile-menu {
+        display: none;
+        width: 100%;
+        padding: 1rem;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    .mobile-menu.active {
+        display: block;
+    }
+    
+    .mobile-menu a {
+        display: block;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    /* Fix music player on mobile */
     #music-player .max-w-7xl.mx-auto {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
+        padding: 0.5rem;
     }
     
     #music-player .flex.items-center.space-x-4 {
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     #music-player .w-1\/4 {
         width: 100%;
-        margin: 1rem 0;
+        margin: 0.5rem 0;
     }
     
     /* Song grid fixes */
     .grid.grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3.lg\:grid-cols-4 {
         grid-template-columns: 1fr;
         gap: 1rem;
+        padding: 0.5rem;
     }
     
     /* Card content fixes */
     .bg-white.dark\:bg-gray-800.rounded-xl.shadow-md {
-        margin: 0.5rem;
-    }
-    
-    /* Form fixes */
-    .max-w-md.mx-auto.px-4.py-12 {
-        padding: 1rem;
-    }
-    
-    /* Text size adjustments */
-    .text-3xl.font-bold {
-        font-size: 1.5rem;
-    }
-    
-    .text-xl {
-        font-size: 1.1rem;
+        margin: 0.25rem;
     }
     
     /* Button spacing */
     .flex.space-x-2 button, .flex.space-x-2 a {
         margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
     }
     
     /* Search form fix */
     .flex input[type="text"] {
         min-width: auto;
+        flex: 1;
     }
     
     /* Admin dashboard fixes */
     .grid.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4.gap-6 {
         grid-template-columns: 1fr;
         gap: 1rem;
-    }
-    
-    /* Profile page fixes */
-    .flex.flex-col.sm\:flex-row.items-center {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .flex-shrink-0.mb-4.sm\:mb-0.sm\:mr-6 {
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-    
-    /* Music player mobile optimization */
-    #music-player {
-        padding: 1rem;
-    }
-    
-    #music-player .flex.items-center.justify-between {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    #music-player img {
-        width: 40px;
-        height: 40px;
-    }
-    
-    #player-volume {
-        width: 60px;
+        padding: 0.5rem;
     }
     
     /* Fullscreen player mobile fixes */
     #fullscreen-player .w-1\/2 {
-        width: 90%;
+        width: 95%;
+        padding: 1rem;
     }
     
     #fullscreen-cover {
-        width: 200px;
-        height: 200px;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Extra small device fixes */
-    .px-6.py-8 {
-        padding: 1rem;
+        width: 150px;
+        height: 150px;
     }
     
-    .p-6 {
-        padding: 1rem;
+    /* Text size adjustments */
+    .text-3xl {
+        font-size: 1.5rem;
     }
     
     .text-2xl {
         font-size: 1.3rem;
     }
     
+    .text-xl {
+        font-size: 1.1rem;
+    }
+    
+    /* Padding adjustments */
+    .px-6 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .py-8 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .p-6 {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small device fixes */
+    .px-4 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
     /* Music player button sizes */
     #music-player button {
-        padding: 0.5rem;
-    }
-    
-    #music-player .flex.items-center.space-x-4 {
-        justify-content: space-between;
-    }
-    
-    /* Hide less important elements on mobile */
-    .mobile\:hidden {
-        display: none;
+        padding: 0.4rem;
+        min-width: 40px;
+        min-height: 40px;
     }
     
     /* Touch-friendly button sizes */
@@ -156,92 +148,30 @@
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-}
-
-/* General mobile improvements */
-@media (hover: none) {
-    /* Improve touch interactions */
-    button:hover, a:hover {
-        transform: none;
+        padding: 0.5rem 1rem;
     }
     
-    .play-btn:hover {
-        animation: none;
+    /* Hide less important elements on mobile */
+    .mobile\:hidden {
+        display: none !important;
+    }
+    
+    .mobile\:block {
+        display: block !important;
     }
 }
 
 /* Prevent horizontal scrolling */
 html, body {
     overflow-x: hidden;
-    max-width: 100%;
+    width: 100%;
 }
 
-/* Improve touch targets for mobile */
-@media (max-width: 768px) {
-    .play-btn, .like-btn {
-        min-width: 44px;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* Form elements */
-    input, select, textarea {
-        font-size: 16px; /* Prevents zoom on iOS */
-    }
-    
-    /* Increase spacing for mobile */
-    .gap-6 {
-        gap: 1rem;
-    }
-    
-    .space-y-6 > * + * {
-        margin-top: 1rem;
-    }
+/* Ensure proper spacing for mobile */
+.mobile-spacing > * {
+    margin-bottom: 0.5rem;
 }
 
-/* Mobile menu */
-.mobile-menu-button {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .mobile-menu-button {
-        display: block;
-    }
-    
-    .mobile-menu {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .mobile-menu.active {
-        display: flex;
-    }
-    
-    .hidden.md\:flex {
-        display: none !important;
-    }
-    
-    .hidden.md\:flex.mobile-menu.active {
-        display: flex !important;
-    }
-}
-
-/* Show mobile-only elements */
-.mobile\:block {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .mobile\:block {
-        display: block;
-    }
-    
-    .mobile\:hidden {
-        display: none;
-    }
+.mobile-spacing > *:last-child {
+    margin-bottom: 0;
 }
