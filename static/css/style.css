@@ -8,7 +8,7 @@
         background: #181818 !important;
         border-top: 1px solid #282828 !important;
         padding: 6px 10px !important;
-        height: 50px !important; /* Reduced height */
+        height: 10px !important; /* Reduced height */
         z-index: 1000 !important;
         display: none;
         align-items: center;
