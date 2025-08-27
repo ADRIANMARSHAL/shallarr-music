@@ -194,7 +194,7 @@ audio.addEventListener('loadedmetadata', () => {
 
 // Update progress bar
 function updateProgressBar() {
-    const progressBar = document.querySelector('.progress-fill');
+    const progressBar = document.getElementById('player-progress');
     const currentTime = document.getElementById('player-current-time');
     
     if (progressBar && audio.duration) {
@@ -206,6 +206,7 @@ function updateProgressBar() {
         currentTime.textContent = formatTime(audio.currentTime);
     }
 }
+
 
 // Update duration display
 function updateDurationDisplay() {
