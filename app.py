@@ -64,26 +64,38 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        
+
+        if not email or not password:
+            flash("Email and password are required.", "error")
+            return redirect(url_for('login'))
+
         try:
-            # Sign in with Supabase
             auth_response = supabase.auth.sign_in_with_password({
                 "email": email,
                 "password": password
             })
-            
-            # Store user in session
+
+            if not auth_response.user:
+                flash("Invalid login credentials.", "error")
+                return redirect(url_for('login'))
+
+            # Store user info in session
             session['user'] = {
-                'id': auth_response.user.id,
-                'email': auth_response.user.email,
-                'access_token': auth_response.session.access_token
+                "id": auth_response.user.id,
+                "email": auth_response.user.email,
+                "access_token": auth_response.session.access_token
             }
-            
+
+            flash("Logged in successfully!", "success")
             return redirect(url_for('index'))
+
         except Exception as e:
-            return render_template('login.html', error=str(e))
-    
+            print(f"Login error: {e}")
+            flash("Invalid credentials or server error.", "error")
+            return redirect(url_for('login'))
+
     return render_template('login.html')
+
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
@@ -94,21 +106,20 @@ def forgot_password():
             return redirect(url_for('forgot_password'))
 
         try:
-            # Trigger Supabase password reset email
-            supabase_admin.auth.admin.reset_user_password(email=email)
-            flash("Password reset instructions sent to your email.", "success")
-
-        except Exception as e:             
-            import traceback             
-            traceback.print_exc()             
-            flash(f"Error: {str(e)}", "error")
-
+            # Supabase v2 password reset
+            reset_response = supabase.auth.admin.generate_link_for_reset_password(email)
+            
+            if reset_response.get('data'):
+                flash("Password reset instructions sent to your email.", "success")
+            else:
+                flash("No user found with that email.", "error")
+        except Exception as e:
+            print(f"Error sending reset link: {e}")
+            flash("Something went wrong. Try again later.", "error")
 
         return redirect(url_for('forgot_password'))
 
     return render_template('forgot_password.html')
-
-
             
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -116,32 +127,44 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
         username = request.form.get('username')
-        
+
+        if not email or not password or not username:
+            flash("All fields are required.", "error")
+            return redirect(url_for('signup'))
+
         try:
-            # Sign up with Supabase
+            # Sign up user
             auth_response = supabase.auth.sign_up({
                 "email": email,
-                "password": password,
+                "password": password
             })
-            
-            # Use admin client to bypass RLS for profile creation
+
+            if not auth_response.user:
+                flash("Signup failed. Try again.", "error")
+                return redirect(url_for('signup'))
+
+            # Create profile using admin client (bypass RLS)
             supabase_admin.table('profiles').insert({
-                'id': auth_response.user.id,
-                'username': username,
-                'email': email
+                "id": auth_response.user.id,
+                "username": username,
+                "email": email
             }).execute()
-            
+
             # Store user in session
             session['user'] = {
-                'id': auth_response.user.id,
-                'email': auth_response.user.email,
-                'access_token': auth_response.session.access_token
+                "id": auth_response.user.id,
+                "email": auth_response.user.email,
+                "access_token": auth_response.session.access_token
             }
-            
+
+            flash("Signup successful!", "success")
             return redirect(url_for('index'))
+
         except Exception as e:
-            return render_template('signup.html', error=str(e))
-    
+            print(f"Signup error: {e}")
+            flash("Error creating account. Try again.", "error")
+            return redirect(url_for('signup'))
+
     return render_template('signup.html')
 
 @app.route('/logout')
