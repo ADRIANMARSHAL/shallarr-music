@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shallarr Music - {% block title %}Stream Your Music{% endblock %}</title>
+    <title>Shallarr Music- {% block title %}Stream Your Music{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
@@ -13,40 +14,36 @@
     <nav class="bg-white dark:bg-gray-800 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="{{ url_for('index') }}" class="flex-shrink-0 flex items-center">
+                    <a href="{{ url_for('admin') }}" class="flex-shrink-0 flex items-center">
                         <i class="fas fa-music text-purple-600 text-2xl mr-2"></i>
-                        <span class="font-bold text-xl">Shallarr Music</span>
+                        <span class="font-bold text-xl">Shallarr</span>
                     </a>
                 </div>
-                
+
+                <!-- Desktop Nav -->
                 <div class="flex items-center space-x-4">
-                    <!-- Search Button -->
-                    <a href="{{ url_for('search') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="fas fa-search"></i>
-                        <span class="ml-1 hidden sm:inline">Search</span>
-                    </a>
-                    
-                    <!-- Navigation Links - Visible on all screens -->
                     <a href="{{ url_for('index') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
                         <i class="fas fa-home"></i>
                         <span class="ml-1">Home</span>
                     </a>
-                    
+
                     {% if user and user.email == ADMIN_EMAIL %}
-                    <a href="{{ url_for('upload') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
+                    <a href="{{ url_for('upload') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-upload"></i>
-                        <span class="ml-1">Upload</span>
+                        <span class="ml-1 hidden sm:inline">Upload</span>
                     </a>
                     <a href="{{ url_for('admin') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
                         <i class="fas fa-cog"></i>
                         <span class="ml-1">Admin</span>
                     </a>
                     {% endif %}
-                    
-                    <!-- Auth Buttons - Always Visible -->
+
+                    <!-- Auth Buttons -->
                     <div class="flex items-center space-x-2">
                         {% if user %}
+                        <span class="hidden sm:inline">Welcome, {{ user.username if user.username else user.email }}</span>
                         <a href="{{ url_for('profile') }}" class="px-3 py-1 rounded-md text-sm bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800 flex items-center">
                             <i class="fas fa-user mr-1"></i>
                             <span class="hidden sm:inline">Profile</span>
@@ -66,21 +63,15 @@
                         </a>
                         {% endif %}
                     </div>
-                    
-                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-                        <i class="fas fa-moon dark:hidden"></i>
-                        <i class="fas fa-sun hidden dark:block"></i>
-                    </button>
                 </div>
             </div>
-            
-            <!-- Mobile Navigation Row - Visible on small screens -->
+
+            <!-- Mobile Nav -->
             <div class="flex justify-center space-x-4 py-2 border-t border-gray-200 dark:border-gray-700 sm:hidden">
                 <a href="{{ url_for('index') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
                     <i class="fas fa-home mr-1"></i>
                     <span>Home</span>
                 </a>
-                
                 {% if user and user.email == ADMIN_EMAIL %}
                 <a href="{{ url_for('upload') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
                     <i class="fas fa-upload mr-1"></i>

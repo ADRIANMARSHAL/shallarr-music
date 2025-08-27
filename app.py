@@ -1,17 +1,25 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session
 from config import Config
 from supabase import create_client, Client
 import time
 from datetime import datetime, timedelta
 from functools import wraps
+from dotenv import load_dotenv
+import requests
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
+
+
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY")
 app.config.from_object(Config)
 
 # Supabase clients
-supabase = Config.supabase
-supabase_admin = Config.supabase_admin
+supabase = Config.supabase()
+supabase_admin = Config.supabase_admin()
 
 # Admin email
 ADMIN_EMAIL = "adrimarsh898@gmail.com"
@@ -77,6 +85,31 @@ def login():
     
     return render_template('login.html')
 
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if not email:
+            flash("Please enter your email.", "error")
+            return redirect(url_for('forgot_password'))
+
+        try:
+            # Trigger Supabase password reset email
+            supabase_admin.auth.admin.reset_user_password(email=email)
+            flash("Password reset instructions sent to your email.", "success")
+
+        except Exception as e:             
+            import traceback             
+            traceback.print_exc()             
+            flash(f"Error: {str(e)}", "error")
+
+
+        return redirect(url_for('forgot_password'))
+
+    return render_template('forgot_password.html')
+
+
+            
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':

@@ -1,5 +1,6 @@
+# config.py
 import os
-from supabase import create_client, Client
+from supabase import create_client
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,6 +11,10 @@ class Config:
     SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
     SUPABASE_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_KEY')
     
-    # Initialize Supabase clients
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    @classmethod
+    def supabase(cls):
+        return create_client(cls.SUPABASE_URL, cls.SUPABASE_KEY)
+    
+    @classmethod
+    def supabase_admin(cls):
+        return create_client(cls.SUPABASE_URL, cls.SUPABASE_SERVICE_KEY)

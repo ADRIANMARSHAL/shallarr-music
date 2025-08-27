@@ -1,41 +1,33 @@
 {% extends "base.html" %}
-
-{% block title %}Login - Shallarr Music{% endblock %}
-
+{% block title %}Login{% endblock %}
 {% block content %}
-<div class="max-w-md mx-auto px-4 py-12">
-    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
-        <div class="px-6 py-8">
-            <div class="text-center mb-6">
-                <i class="fas fa-music text-purple-600 text-4xl mb-3"></i>
-                <h2 class="text-3xl font-bold">Log In</h2>
-                <p class="text-gray-500 dark:text-gray-400">Welcome back to Shallarr Music</p>
+<div class="flex items-center justify-center h-screen">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100">Login</h2>
+        <form action="{{ url_for('login') }}" method="POST" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
+                <input type="email" name="email" id="email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-100">
             </div>
-            
-            {% if error %}
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline">{{ error }}</span>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
+                <input type="password" name="password" id="password" required class="mt-1 w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-gray-100">
             </div>
-            {% endif %}
-            
-            <form method="POST">
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Email</label>
-                    <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white">
+            <div class="flex justify-between items-center">
+                <div class="text-sm">
+                    <a href="{{ url_for('forgot_password') }}" class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-200">
+                        Forgot Password?
+                    </a>
                 </div>
-                
-                <div class="mb-6">
-                    <label for="password" class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2">Password</label>
-                    <input type="password" id="password" name="password" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white">
-                </div>
-                
-                <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-150">Log In</button>
-            </form>
-            
-            <div class="text-center mt-4">
-                <p class="text-gray-600 dark:text-gray-400">Don't have an account? <a href="{{ url_for('signup') }}" class="text-purple-600 hover:text-purple-500 font-medium">Sign up</a></p>
             </div>
-        </div>
+            <button type="submit" class="w-full py-2 px-4 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                Login
+            </button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+            Don't have an account? 
+            <a href="{{ url_for('signup') }}" class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-200">Sign Up</a>
+        </p>
     </div>
 </div>
 {% endblock %}
