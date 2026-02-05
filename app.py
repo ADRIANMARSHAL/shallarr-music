@@ -189,12 +189,28 @@ def index():
     try:
         response = supabase.table('songs').select('*').order('created_at', desc=True).limit(50).execute()
         songs = response.data if response.data else []
+        
+        # Get user's liked songs if logged in
+        user_likes = set()
+        user = session.get('user')
+        if user:
+            try:
+                auth_client = get_authenticated_client()
+                if auth_client:
+                    likes_response = auth_client.table('likes').select('song_id').eq('user_id', user['id']).execute()
+                    user_likes = {like['song_id'] for like in likes_response.data}
+            except Exception as e:
+                logger.error(f"Error fetching user likes: {e}")
+        
+        # Add liked status to each song
+        for song in songs:
+            song['is_liked'] = song['id'] in user_likes
+            
     except Exception as e:
         logger.error(f"Error fetching songs: {e}")
         songs = []
         flash("Could not load songs.", "error")
     
-    user = session.get('user')
     return render_template('index.html', songs=songs, user=user, ADMIN_EMAIL=ADMIN_EMAIL)
 
 # ================================================================================================
@@ -475,17 +491,38 @@ def like_song(song_id):
         existing = auth_client.table('likes').select('*').eq('user_id', user_id).eq('song_id', song_id).execute()
         
         if existing.data:
+            # Unlike
             auth_client.table('likes').delete().eq('user_id', user_id).eq('song_id', song_id).execute()
             auth_client.rpc('decrement_likes', {'song_id': song_id}).execute()
-            return jsonify({'liked': False}), 200
+            is_liked = False
         else:
+            # Like
             auth_client.table('likes').insert({'user_id': user_id, 'song_id': song_id}).execute()
             auth_client.rpc('increment_likes', {'song_id': song_id}).execute()
-            return jsonify({'liked': True}), 200
+            is_liked = True
+        
+        # Get updated like count
+        song = auth_client.table('songs').select('likes').eq('id', song_id).single().execute()
+        like_count = song.data['likes'] if song.data else 0
+        
+        # Return HTML for HTMX swap
+        icon_class = 'fas' if is_liked else 'far'
+        text_class = 'text-purple-600 dark:text-purple-400' if is_liked else 'text-gray-500 dark:text-gray-400'
+        
+        html = f'''
+        <button hx-post="/like/{song_id}" 
+                hx-swap="outerHTML" 
+                hx-target="this"
+                class="like-btn flex items-center {text_class} hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+            <i class="{icon_class} fa-heart mr-1"></i>
+            <span class="like-count">{like_count}</span>
+        </button>
+        '''
+        return html, 200
             
     except Exception as e:
         logger.error(f"Like toggle error: {e}")
-        return jsonify({'error': 'Could not update like status'}), 500
+        return '<span class="text-red-500 text-xs">Error</span>', 500
 
 @app.route('/search')
 def search():
@@ -500,6 +537,23 @@ def search():
         ).limit(50).execute()
         
         songs = response.data if response.data else []
+        
+        # Get user's liked songs if logged in
+        user_likes = set()
+        user = session.get('user')
+        if user:
+            try:
+                auth_client = get_authenticated_client()
+                if auth_client:
+                    likes_response = auth_client.table('likes').select('song_id').eq('user_id', user['id']).execute()
+                    user_likes = {like['song_id'] for like in likes_response.data}
+            except Exception as e:
+                logger.error(f"Error fetching user likes: {e}")
+        
+        # Add liked status to each song
+        for song in songs:
+            song['is_liked'] = song['id'] in user_likes
+            
     except Exception as e:
         logger.error(f"Search error: {e}")
         songs = []
