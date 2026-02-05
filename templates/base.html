@@ -16,7 +16,7 @@
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="{{ url_for('admin') }}" class="flex-shrink-0 flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex-shrink-0 flex items-center">
                         <i class="fas fa-music text-purple-600 text-2xl mr-2"></i>
                         <span class="font-bold text-xl">Shallarr</span>
                     </a>
@@ -30,11 +30,11 @@
                     </a>
 
                     {% if user and user.email == ADMIN_EMAIL %}
-                    <a href="{{ url_for('upload') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <a href="{{ url_for('upload_page') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                         <i class="fas fa-upload"></i>
                         <span class="ml-1 hidden sm:inline">Upload</span>
                     </a>
-                    <a href="{{ url_for('admin') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
+                    <a href="{{ url_for('admin_page') }}" class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hidden sm:block">
                         <i class="fas fa-cog"></i>
                         <span class="ml-1">Admin</span>
                     </a>
@@ -73,11 +73,11 @@
                     <span>Home</span>
                 </a>
                 {% if user and user.email == ADMIN_EMAIL %}
-                <a href="{{ url_for('upload') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
+                <a href="{{ url_for('upload_page') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
                     <i class="fas fa-upload mr-1"></i>
                     <span>Upload</span>
                 </a>
-                <a href="{{ url_for('admin') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
+                <a href="{{ url_for('admin_page') }}" class="px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center">
                     <i class="fas fa-cog mr-1"></i>
                     <span>Admin</span>
                 </a>

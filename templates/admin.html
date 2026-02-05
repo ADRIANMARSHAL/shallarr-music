@@ -61,7 +61,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
         <div class="flex flex-wrap gap-4">
-            <a href="{{ url_for('upload') }}" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center">
+            <a href="{{ url_for('upload_page') }}" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center">
                 <i class="fas fa-upload mr-2"></i> Upload New Song
             </a>
             <a href="{{ url_for('index') }}" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center">
@@ -113,7 +113,7 @@
         <div class="p-8 text-center">
             <i class="fas fa-music text-4xl text-gray-400 mb-4"></i>
             <p class="text-gray-500 dark:text-gray-400">No songs uploaded yet</p>
-            <a href="{{ url_for('upload') }}" class="inline-block mt-4 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+            <a href="{{ url_for('upload_page') }}" class="inline-block mt-4 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
                 <i class="fas fa-upload mr-2"></i> Upload Your First Song
             </a>
         </div>

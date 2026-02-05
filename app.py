@@ -2,6 +2,7 @@ import os
 import time
 import uuid
 import logging
+import re
 from datetime import datetime, timedelta
 from functools import wraps
 
@@ -70,11 +71,8 @@ def get_authenticated_client():
     if not access_token:
         return None
     
-    auth_client = create_client(
-        Config.SUPABASE_URL,
-        Config.SUPABASE_ANON_KEY,
-        options={"headers": {"Authorization": f"Bearer {access_token}"}}
-    )
+    auth_client = create_client(Config.SUPABASE_URL, Config.SUPABASE_ANON_KEY)
+    auth_client.postgrest.auth(access_token)
     return auth_client
 
 def check_token_expiry():
@@ -204,7 +202,7 @@ def index():
 # ================================================================================================
 
 @app.route('/signup', methods=['GET', 'POST'])
-@limiter.limit("5 per hour")
+# @limiter.limit("5 per hour")  # Temporarily disabled for testing
 def signup():
     if request.method == 'POST':
         email = request.form.get('email', '').strip()
@@ -233,6 +231,10 @@ def signup():
             if not auth_response.user:
                 flash("Signup failed. Email may be in use.", "error")
                 return redirect(url_for('signup'))
+            
+            if not auth_response.session:
+                flash("Account created! Check your email to confirm your account.", "success")
+                return redirect(url_for('login'))
             
             session['user'] = {
                 "id": auth_response.user.id,
@@ -357,9 +359,16 @@ def request_upload():
         if cover_size > Config.MAX_COVER_SIZE:
             return jsonify({'error': f'Cover too large. Max: {Config.MAX_COVER_SIZE / (1024*1024):.0f}MB'}), 400
         
+        def sanitize_filename(filename):
+            name, ext = os.path.splitext(filename)
+            name = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
+            return f"{name}{ext}"
+        
         upload_id = str(uuid.uuid4())
-        audio_path = f"audios/{upload_id}_{audio_filename}"
-        cover_path = f"covers/{upload_id}_{cover_filename}"
+        safe_audio_name = sanitize_filename(audio_filename)
+        safe_cover_name = sanitize_filename(cover_filename)
+        audio_path = f"audios/{upload_id}_{safe_audio_name}"
+        cover_path = f"{upload_id}_{safe_cover_name}"
         
         audio_upload_data = supabase_admin.storage.from_('music').create_signed_upload_url(audio_path)
         cover_upload_data = supabase_admin.storage.from_('covers').create_signed_upload_url(cover_path)
@@ -387,7 +396,7 @@ def finalize_upload():
         
         title = data.get('title', '').strip()
         artist = data.get('artist', '').strip()
-        featured_artist = data.get('featured_artist', '').strip()
+        featured_artist = (data.get('featured_artist') or '').strip()
         audio_path = data.get('audio_path')
         cover_path = data.get('cover_path')
         upload_id = data.get('upload_id')
@@ -421,7 +430,7 @@ def finalize_upload():
             "uploader_id": session['user']['id'],
             "streams": 0,
             "likes": 0,
-            "created_at": datetime.utcnow().isoformat()
+            "created_at": datetime.now(datetime.UTC).isoformat()
         }
         
         result = supabase_admin.table('songs').insert(song_data).execute()
@@ -505,6 +514,13 @@ def profile():
         user_id = session['user']['id']
         auth_client = get_authenticated_client()
         
+        profile_data = auth_client.table('profiles').select('*').eq('id', user_id).execute()
+        profile = profile_data.data[0] if profile_data.data else None
+        
+        if not profile:
+            flash("Profile not found.", "error")
+            return redirect(url_for('index'))
+        
         likes = auth_client.table('likes').select('song_id').eq('user_id', user_id).execute()
         liked_song_ids = [like['song_id'] for like in likes.data] if likes.data else []
         
@@ -517,9 +533,10 @@ def profile():
     except Exception as e:
         logger.error(f"Profile page error: {e}")
         songs = []
+        profile = None
         flash("Could not load profile.", "error")
     
-    return render_template('profile.html', songs=songs, user=session['user'])
+    return render_template('profile.html', songs=songs, user=session['user'], profile=profile)
 
 @app.route('/admin')
 @admin_required
