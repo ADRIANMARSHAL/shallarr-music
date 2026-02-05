@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden;
+  }
+}
