@@ -1,6 +1,10 @@
 -- Shallarr Music Database Setup
 -- Run this in Supabase SQL Editor
 
+---------------------------------------------------------------------------
+--  REMEMBER TO REPLACE 'YOUR_ADMIN_EMAIL' with your actual ADMIN email
+---------------------------------------------------------------------------
+
 -- Tables
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -110,4 +114,3 @@ CREATE POLICY "Only admins can update songs" ON songs
   FOR UPDATE USING (auth.uid() IS NOT NULL AND auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL@example.com');
 CREATE POLICY "Only admins can delete songs" ON songs
   FOR DELETE USING (auth.uid() IS NOT NULL AND auth.jwt() ->> 'email' = 'YOUR_ADMIN_EMAIL@example.com');
-
